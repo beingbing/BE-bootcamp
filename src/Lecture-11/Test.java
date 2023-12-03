@@ -1,14 +1,15 @@
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 public class Test {
     public static void main(String[] args) {
-        Game g = new Game(10, 4);
-        Class c = g.getClass();
+        Object o = new Game(10, 4);
+        Class c = o.getClass();
         System.out.println(c);
+        System.out.println(c.getName());
 
-        Field[] fields = Game.class.getDeclaredFields();
-        for (Field f : fields) {
-            System.out.println(f.getName());
+        Method[] methods = c.getDeclaredMethods();
+        for (Method m : methods) {
+            System.out.println(m.getName());
         }
     }
 }
