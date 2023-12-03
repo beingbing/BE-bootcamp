@@ -16,5 +16,7 @@ public class Chess extends TwoPlayerGame {
         return this.pieces;
     }
 
-    private void printBoard() {}
+    private void printBoard() {
+        System.out.println("the board is printed!!");
+    }
 }
