@@ -1,6 +1,7 @@
 package com.samar.bootcamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -30,10 +31,15 @@ public class BootcampApplication implements ApplicationRunner {
 	@Autowired
 	private MessageService messageService;
 
+	@Value("${key:defaultValue}")
+	private String value;
+
+	// mvn spring-boot:run -Dspring-boot.run.arguments=--${key}=${value}
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(BootcampApplication.class, args);
 		Arrays.stream(ctx.getBeanDefinitionNames()).forEach(System.out::println);
 		System.out.println("Hello Samar !!!");
+		Arrays.stream(args).forEach(System.out::println);
 
 //		MessageService messageService = new Whatsapp();
 //		Notification notification = new Notification(messageService);
@@ -48,6 +54,7 @@ public class BootcampApplication implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 //		notification.sendMessage("Hi");
 //		notification.sendMessage("Hello");
+		System.out.println(("value of 'key' is: " + value));
 	}
 
 	@Bean // only work if @Configuration is present in parent class
