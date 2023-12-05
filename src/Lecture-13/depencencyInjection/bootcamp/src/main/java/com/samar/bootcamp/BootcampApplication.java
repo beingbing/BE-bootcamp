@@ -50,6 +50,10 @@ public class BootcampApplication implements ApplicationRunner {
 
 		Notification notification = ctx.getBean(Notification.class);
 		notification.sendMessage("hello from manually created and fetched bean");
+
+		SmsConfig smsConfig = ctx.getBean(SmsConfig.class);
+		System.out.println("sms token config: " + smsConfig.getToken());
+		System.out.println("sms hostname config: " + smsConfig.getHostname());
 	}
 
 	@Override
