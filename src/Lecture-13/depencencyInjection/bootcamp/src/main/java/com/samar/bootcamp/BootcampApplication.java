@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.Arrays;
 
@@ -26,12 +27,13 @@ import java.util.Arrays;
 
 // any class having @Configuration will have capability to add Beans
 @SpringBootApplication
+@PropertySource("classpath:application-stage.properties")
 public class BootcampApplication implements ApplicationRunner {
 
 	@Autowired
 	private MessageService messageService;
 
-	@Value("${key:defaultValue}")
+	@Value("${wa.hostname.companyName:defaultValue}")
 	private String value;
 
 	// mvn spring-boot:run -Dspring-boot.run.arguments=--${key}=${value}
