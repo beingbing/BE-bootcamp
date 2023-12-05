@@ -3,19 +3,19 @@ package com.samar.bootcamp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class Notification {
 
-    @Autowired
-    private MessageService service;
+//    @Autowired
+//    private MessageService service;
 
-//    private MessageService messageService;
+    private MessageService messageService;
 
-//    public Notification(MessageService messageService) {
-//        this.messageService = messageService;
-//    }
+    public Notification(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     public void sendMessage(String message) {
-        service.sendMessage(message);
+        messageService.sendMessage(message);
     }
 }

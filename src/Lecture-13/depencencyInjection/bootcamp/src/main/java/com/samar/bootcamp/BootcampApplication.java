@@ -6,6 +6,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 
@@ -21,11 +22,13 @@ import java.util.Arrays;
 	because, we need a place where we do not need to define a field static to work upon.
 
  */
+
+// any class having @Configuration will have capability to add Beans
 @SpringBootApplication
 public class BootcampApplication implements ApplicationRunner {
 
 	@Autowired
-	private Notification notification;
+	private MessageService messageService;
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(BootcampApplication.class, args);
@@ -36,11 +39,19 @@ public class BootcampApplication implements ApplicationRunner {
 //		Notification notification = new Notification(messageService);
 		// give responsibility of creating notification service also to spring
 //		Notification notification = new Notification();
+
+		Notification notification = ctx.getBean(Notification.class);
+		notification.sendMessage("hello from manually created and fetched bean");
 	}
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		notification.sendMessage("Hi");
-		notification.sendMessage("Hello");
+//		notification.sendMessage("Hi");
+//		notification.sendMessage("Hello");
+	}
+
+	@Bean // only work if @Configuration is present in parent class
+	public Notification notification() {
+		return new Notification(messageService);
 	}
 }
