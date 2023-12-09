@@ -39,32 +39,32 @@ public class BootcampApplication implements ApplicationRunner {
 	// mvn spring-boot:run -Dspring-boot.run.arguments=--${key}=${value}
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(BootcampApplication.class, args);
-		Arrays.stream(ctx.getBeanDefinitionNames()).forEach(System.out::println);
+//		Arrays.stream(ctx.getBeanDefinitionNames()).forEach(System.out::println);
 		System.out.println("Hello Samar !!!");
-		Arrays.stream(args).forEach(System.out::println);
+//		Arrays.stream(args).forEach(System.out::println);
 
 //		MessageService messageService = new Whatsapp();
 //		Notification notification = new Notification(messageService);
 		// give responsibility of creating notification service also to spring
 //		Notification notification = new Notification();
 
-		Notification notification = ctx.getBean(Notification.class);
-		notification.sendMessage("hello from manually created and fetched bean");
+//		Notification notification = ctx.getBean(Notification.class);
+//		notification.sendMessage("hello from manually created and fetched bean");
 
-		SmsConfig smsConfig = ctx.getBean(SmsConfig.class);
-		System.out.println("sms token config: " + smsConfig.getToken());
-		System.out.println("sms hostname config: " + smsConfig.getHostname());
+//		SmsConfig smsConfig = ctx.getBean(SmsConfig.class);
+//		System.out.println("sms token config: " + smsConfig.getToken());
+//		System.out.println("sms hostname config: " + smsConfig.getHostname());
 	}
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 //		notification.sendMessage("Hi");
 //		notification.sendMessage("Hello");
-		System.out.println(("value of 'key' is: " + value));
+//		System.out.println(("value of 'key' is: " + value));
 	}
 
-	@Bean // only work if @Configuration is present in parent class
-	public Notification notification() {
-		return new Notification(messageService);
-	}
+//	@Bean // only work if @Configuration is present in parent class
+//	public Notification notification() {
+//		return new Notification(messageService);
+//	}
 }
