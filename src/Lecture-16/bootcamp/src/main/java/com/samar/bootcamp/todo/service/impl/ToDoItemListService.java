@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class ToDoItemListService implements ToDoItemRepository {
-    private List<ToDoList.ToDoItem> toDoItemList;
+    private final List<ToDoList.ToDoItem> toDoItemList;
 
     @Autowired
     public ToDoItemListService(List<ToDoList.ToDoItem> toDoItemList) {
