@@ -1,11 +1,13 @@
 package com.samar.bootcamp;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+@ToString
 @ConfigurationProperties(prefix = "wa")
 @ConfigurationPropertiesScan
 @Component
