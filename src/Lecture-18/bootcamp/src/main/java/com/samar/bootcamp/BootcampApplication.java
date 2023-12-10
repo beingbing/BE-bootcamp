@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BootcampApplication {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         SpringApplication.run(BootcampApplication.class, args);
         System.out.println("Hello Samar !!!");
 
@@ -20,6 +20,9 @@ public class BootcampApplication {
         // now, JVM will call its run() to start execution
         t2.start();
         t3.start();
+        t1.join(); // it will make your current thread wait until t1 is over
+        // it is like a blocking call
+
         System.out.println("main thread in execution");
     }
 
@@ -59,5 +62,43 @@ public class BootcampApplication {
     * Third
     * Third
     */
+
+    /*
+    * You can see the difference after adding t1.join().
+    * main thread got completed only after t1 is completed, although
+    * definitely not immediately.
+    *   Hello Samar !!!
+        first
+        first
+        first
+        first
+        first
+        Second
+        Second
+        Second
+        Second
+        Second
+        Second
+        Second
+        Second
+        Second
+        Second
+        first
+        first
+        first
+        first
+        Third
+        first
+        Third
+        Third
+        Third
+        Third
+        Third
+        Third
+        Third
+        Third
+        Third
+        main thread in execution
+    * */
 
 }
