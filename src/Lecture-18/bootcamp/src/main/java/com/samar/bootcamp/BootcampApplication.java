@@ -3,6 +3,9 @@ package com.samar.bootcamp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootApplication
 public class BootcampApplication {
 
@@ -25,19 +28,19 @@ public class BootcampApplication {
 
 //        System.out.println("main thread in execution");
 
-        IntStore store = new IntStore();
-
-        Thread t1 = new Thread(new Worker(store));
-        Thread t2 = new Thread(new Worker(store));
-        Thread t3 = new Thread(new Worker(store));
-        t1.start();
-        t2.start();
-        t3.start();
-        t1.join();
-        t2.join();
-        t3.join();
-
-        System.out.println("store x val is: " + store.getX());
+//        IntStore store = new IntStore();
+//
+//        Thread t1 = new Thread(new Worker(store));
+//        Thread t2 = new Thread(new Worker(store));
+//        Thread t3 = new Thread(new Worker(store));
+//        t1.start();
+//        t2.start();
+//        t3.start();
+//        t1.join();
+//        t2.join();
+//        t3.join();
+//
+//        System.out.println("store x val is: " + store.getX());
         // output: 170990, 160660, 181403
         // we get different value of x everytime we execute above code snippet
         // that's due to racing condition
@@ -52,6 +55,21 @@ public class BootcampApplication {
          * And we can achieve locking by using 'synchronised' keyword and putting
          * critical code in its block
         * */
+
+        // Another example to explain racing condition and it's prevention
+        List<Integer> nums = new ArrayList<>();
+        Thread t1 = new Thread(new Doer(nums, 5));
+        Thread t2 = new Thread(new Doer(nums, 5));
+        Thread t3 = new Thread(new Doer(nums, 5));
+        t1.start();
+        t2.start();
+        t3.start();
+        t1.join();
+        t2.join();
+        t3.join();
+
+        System.out.println(nums.size());
+        // it can give output either 1 or 2 or 3
     }
 
 	/*
