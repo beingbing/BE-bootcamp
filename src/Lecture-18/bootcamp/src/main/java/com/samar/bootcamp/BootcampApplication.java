@@ -13,17 +13,37 @@ public class BootcampApplication {
         // Thread: tell this guy what to run
         // Runnable: It's a simple interface in java, which has a run()
 
-        Thread t1 = new Thread(new MyRunnable("first"));
-        Thread t2 = new Thread(new MyRunnable("Second"));
-        Thread t3 = new Thread(new MyRunnable("Third"));
-        t1.start(); // t1 is launched and now we move down
+//        Thread t1 = new Thread(new MyRunnable("first"));
+//        Thread t2 = new Thread(new MyRunnable("Second"));
+//        Thread t3 = new Thread(new MyRunnable("Third"));
+//        t1.start(); // t1 is launched and now we move down
         // now, JVM will call its run() to start execution
-        t2.start();
-        t3.start();
-        t1.join(); // it will make your current thread wait until t1 is over
+//        t2.start();
+//        t3.start();
+//        t1.join(); // it will make your current thread wait until t1 is over
         // it is like a blocking call
 
-        System.out.println("main thread in execution");
+//        System.out.println("main thread in execution");
+
+        IntStore store = new IntStore();
+
+        Thread t1 = new Thread(new Worker(store));
+        Thread t2 = new Thread(new Worker(store));
+        Thread t3 = new Thread(new Worker(store));
+        t1.start();
+        t2.start();
+        t3.start();
+        t1.join();
+        t2.join();
+        t3.join();
+
+        System.out.println("store x val is: " + store.getX());
+        // output: 170990, 160660, 181403
+        // we get different value of x everytime we execute above code snippet
+        // that's due to racing condition
+        // when multiple threads operate on shared resource then due to
+        // interleaving of instructions the desired output is not same as
+        // the expected output.
     }
 
 	/*
