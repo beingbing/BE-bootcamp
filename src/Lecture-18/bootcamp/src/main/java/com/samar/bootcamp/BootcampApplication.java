@@ -44,6 +44,14 @@ public class BootcampApplication {
         // when multiple threads operate on shared resource then due to
         // interleaving of instructions the desired output is not same as
         // the expected output.
+
+        /* prevention of racing condition is to guard shared resource by putting
+         * it into critical section. Critical section is a piece of code which
+         * lies inside a lock.
+         *
+         * And we can achieve locking by using 'synchronised' keyword and putting
+         * critical code in its block
+        * */
     }
 
 	/*
