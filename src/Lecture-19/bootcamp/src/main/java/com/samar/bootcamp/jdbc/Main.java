@@ -45,6 +45,12 @@ public class Main {
             Statement stm = c.createStatement();
             ResultSet rs = stm.executeQuery("select * from " + tableName);
             while (rs.next()) {
+            // if a ResultSet contains 1M rows, then not all rows are transferred to application
+            // server from DB server.
+            // As Result-Set is being loaded, on DB server, a particular small amount of rows will be
+            // forwarded to application server, on which .next() of rs will run and as soon as we
+            // run out of rows on application server, a network call will be made internally to
+            // get the next batch of rows.
                 System.out.println(rs.getString(colName));
             }
             rs.close();
@@ -58,6 +64,10 @@ public class Main {
 
             // A quick way to do is to scrap Connection Object and all the Objects born out of it
             // will be destroyed instantly.
+
+            //      2. Another reason is, when a query is fired on DB server, some resources are
+            //      created by DB server as well, like cursor and local objects. Once, you close
+            //      the connection, all those object memory is freed as well.
         } finally {
             if (c != null) {
                 c.close();
