@@ -14,5 +14,11 @@ public class Hibernate {
      *
      * Spring Data JPA is an abstraction layer on top of JPA to reduce the amount of boilerplate code
      * required to implement data access object (DAO). It uses Hibernate as a default JPA provider.
+     *
+     * JPA is a Java Persistence API. and it is renamed to Jakarta Persistence API.
+     */
+
+    /*
+     * When we establish a connection to DB, every transaction done by hibernate happens in sessions.
      */
 }
