@@ -15,6 +15,8 @@ public class Info {
     * */
 
     // it is not JDBC's responsibility to write queries
+    // when we are working on Spring-Boot, Hibernate does that for us, it writes queries
+    // we use Hibernate, which internally uses JDBC
 
     /*  1. Abstract out networking part. Like, establishing and killing connection.
      *  2. extensibility to connect to different DB vendors. [requires superior knowledge of LLD]
@@ -33,4 +35,13 @@ public class Info {
      * DriverManager manages Driver and is responsible for getting you a connection.
      * There is a list of Drivers that a DriverManager maintains.
     * */
+
+    // connection pooling -
+    // whenever DriverManager.getConnection() is called, it return us a new connection
+    // whenever a new connection is created, a lot of things happen, like: PCP handshake, network calls,
+    // resources are initialised. Hence it's a very expensive operation to create a new connection for
+    // every request. That's why connection pooling exist, which is very similar to Thread Pooling.
+    // JDBC doesn't provide a connection pool, but we can write our own class for connection pooling.
+    // However, Apache Tomcat does that for us, it has DataSource which provides us with the connection pool.
+    // we can set PoolProperties and use DataSource.getConnection() to get a connection from that pool.
 }
