@@ -74,4 +74,97 @@ public class Main {
             }
         }
     }
+
+    private static void connectToDBExampleForHavingDiffResSetsWithSameCon1(String url, String userName, String password, String tableName, String colName, String val1, String val2) throws SQLException {
+        Connection c = DriverManager.getConnection(url, userName, password);
+        Statement stm = c.createStatement();
+//        System.out.println(c.getAutoCommit());
+        ResultSet res1 = stm.executeQuery("select * from " + tableName + " where " + colName + " = " + val1);
+        ResultSet res2 = stm.executeQuery("select * from " + tableName + " where " + colName + " = " + val2);
+        while (res1.next()) {
+            System.out.println(res1.getString(colName));
+        }
+        while (res2.next()) {
+            System.out.println(res2.getString(colName));
+        }
+        /*
+         * The above statement will yield: This 'ResultSet' is closed.
+         * because,
+         * with one Statement you can have only one ResultSet which it is pointing to.
+         * It can not point to any other ResultSet. but, here we tried to create 2 RS
+         * using 1 Statement.
+         *
+         * but, below code will work -
+         * ResultSet res1 = stm.executeQuery("select * from " + tableName + " where " + colName + " = " + val1);
+         * while (res1.next()) {
+         *  System.out.println(res1.getString(colName));
+         * }
+         * ResultSet res2 = stm.executeQuery("select * from " + tableName + " where " + colName + " = " + val2);
+         * while (res2.next()) {
+         *  System.out.println(res2.getString(colName));
+         * }
+         *
+         * see below 👇 working code
+         * */
+        c.close();
+    }
+
+    // the below code will work fine
+    private static void connectToDBExampleForHavingDiffResSetsWithSameCon2(String url, String userName, String password, String tableName, String colName, String val1, String val2) throws SQLException {
+        Connection c = DriverManager.getConnection(url, userName, password);
+        Statement stm1 = c.createStatement();
+        Statement stm2 = c.createStatement();
+        System.out.println(c.getAutoCommit());
+        ResultSet res1 = stm1.executeQuery("select * from " + tableName + " where " + colName + " = " + val1);
+        ResultSet res2 = stm2.executeQuery("select * from " + tableName + " where " + colName + " = " + val2);
+        while (res1.next()) {
+            System.out.println(res1.getString(colName));
+        }
+        while (res2.next()) {
+            System.out.println(res2.getString(colName));
+        }
+        c.close();
+    }
+
+    private static void connectDBExampleWithScrollableResultSet(String url, String userName, String password, String tableName, String colName, String val1) throws SQLException {
+        Connection c = DriverManager.getConnection(url, userName, password);
+        Statement stm = c.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        // INSENSITIVE suffix is used to make sure if data in DB is changed after execution of query
+        // then it will not affect our ResultSet which is maintained using cursor at DB server.
+        // conversely, SENSITIVE will keep our ResultSet maintained at DB server end also updated to any change made.
+        // ----
+        // CONCUR_UPDATABLE constant gives us capability to update data fetched in ResultSet (which will reflect on DB as well)
+        // converely, CONCUR_READ_ONLY constant keeps the ResultSet immutable
+        // although, update query is preferred because every update will execute a query over network on DB server
+        // ----
+        // alternatively, we have CachedRowSet, which will keep all updates in memory and then at once
+        // when you instruct it to update, all the changes will be updated in one go.
+        ResultSet rs = stm.executeQuery("select * from " + tableName + " where " + colName + " = " + val1);
+        rs.last(); // Mind it => It's not after row, it's "AT LAST ROW!!"
+        System.out.println(rs.getString(colName));
+        while (rs.previous()) {
+            System.out.println(rs.getString(colName));
+        }
+        c.close();
+    }
+    /*
+     * just like next(), previous() will move the cursor to previous row.
+     *
+     * When a call to previous() returns false, the cursor is position before the first row.
+     *
+     * Any invocation of a ResultSet method which requires a current row will result in a SQLException being thrown.
+     *
+     * while (res1.next()) {
+     *     System.out.println(res1.getString(colName));
+     * }
+     * while (res1.previous()) {
+     *     System.out.println(res1.getString(colName));
+     * }
+     * The above code will throw: Operation requires a scrollable ResultSet, but this ResultSet is FORWARD_ONLY.
+     * So, by default, ResultSet is TYPE_FORWARD_ONLY. i.e., we can only go down in one direction.
+     * If you want to go up, you need to configure that using TYPE_SCROLL_*
+     * It is because along with ResultSet maintained at our end, one is maintained at DB server end as well to which
+     * we need to ask to keep ability of going up as well, which we need to do at the time of executing query statement to DB.
+     *
+     */
 }
