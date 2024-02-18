@@ -67,6 +67,9 @@ public class BootcampApplication implements ApplicationRunner {
             // the above change got saved because we were still in persist state
             // to not let it reflect we need to go in transient state again using detach();
             entityManager.detach(offer);
+            // what if we again want to move it to persist state ?
+            // then we need to use merge()
+            entityManager.merge(offer);
             transaction.commit(); // changes committed
             System.out.println("Generated ID = " + offer.getId());
         } catch (Exception e) {
