@@ -53,12 +53,38 @@ public class BootcampApplication implements ApplicationRunner {
         }
     }
 
+    private void inTransaction2(EntityManagerFactory entityManagerFactory, LockdownOffer offer) {
+        // Persistence Context
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(offer); // changes staged (managed state)
+            // lets change value after staging
+            offer.setAvgCnt(78L);
+            // will above change be reflected ?
+            // the above change got saved because we were still in persist state
+            // to not let it reflect we need to go in transient state again using detach();
+            entityManager.detach(offer);
+            transaction.commit(); // changes committed
+            System.out.println("Generated ID = " + offer.getId());
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+            entityManagerFactory.close();
+        }
+    }
+
     public void persistWithJPA(EntityManagerFactory entityManagerFactory) {
         LockdownOffer offer = new LockdownOffer(); // object in new state
-        offer.setAvgAmt(30L);
+        offer.setAvgAmt(12L);
         offer.setMerchantId(123L);
-        offer.setAvgCnt(65L);
+        offer.setAvgCnt(34L);
         System.out.println("offer: " + offer); // object in transient state
-        inTransaction(entityManagerFactory, offer);
+        inTransaction2(entityManagerFactory, offer);
     }
 }
