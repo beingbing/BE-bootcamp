@@ -25,7 +25,8 @@ public class BootcampApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("run called");
         EntityManagerFactory entityManagerFactory = setUp();
-        persistWithJPA(entityManagerFactory);
+//        persistWithJPA(entityManagerFactory);
+        fetchWithJPA(entityManagerFactory);
     }
 
     protected EntityManagerFactory setUp() {
@@ -86,5 +87,11 @@ public class BootcampApplication implements ApplicationRunner {
         offer.setAvgCnt(34L);
         System.out.println("offer: " + offer); // object in transient state
         inTransaction2(entityManagerFactory, offer);
+    }
+
+    public void fetchWithJPA(EntityManagerFactory entityManagerFactory) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        LockdownOffer res = entityManager.find(LockdownOffer.class, 10);
+        System.out.println("Got object " + res);
     }
 }
