@@ -18,6 +18,15 @@ public class Hibernate {
      * JPA is a Java Persistence API. and it is renamed to Jakarta Persistence API.
      */
 
+     /*
+      * repositories (e.g. Spring JPA)
+      * JPA  (Hibernate Native - JPA interface by Hibernate) (Hibernate Native is not used much, JPA is used)
+      * Hibernate - JPA implemantation
+      * JDBC
+      * Driver
+      * DataBase
+      */
+
     /*
      * When we establish a connection to DB, every transaction done by hibernate happens in sessions.
      */
