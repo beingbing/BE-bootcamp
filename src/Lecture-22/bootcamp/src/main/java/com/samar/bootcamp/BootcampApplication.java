@@ -2,11 +2,13 @@ package com.samar.bootcamp;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.samar.bootcamp.entity.LockdownOffer;
+import com.samar.bootcamp.hibernate.HibernateService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +21,9 @@ import java.util.List;
 @EnableScheduling // will look for @scheduled and start it
 public class BootcampApplication implements ApplicationRunner {
 
+    @Autowired
+    private HibernateService hibernateService;
+
     public static void main(String[] args) throws JsonProcessingException {
         SpringApplication.run(BootcampApplication.class, args);
         System.out.println("Hello Samar !!!");
@@ -27,12 +32,14 @@ public class BootcampApplication implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("run called");
-        EntityManagerFactory entityManagerFactory = setUp();
+//        EntityManagerFactory entityManagerFactory = setUp();
 //        persistWithJPA(entityManagerFactory);
-        LockdownOffer offer = fetchWithJPA(entityManagerFactory, 2);
+//        LockdownOffer offer = fetchWithJPA(entityManagerFactory, 2);
 //        fetchAllWithJPA(entityManagerFactory);
-        removeWithJPA(entityManagerFactory, offer);
-        entityManagerFactory.close();
+//        removeWithJPA(entityManagerFactory, offer);
+//        entityManagerFactory.close();
+
+        hibernateService.execute();
     }
 
     protected EntityManagerFactory setUp() {
@@ -124,7 +131,7 @@ public class BootcampApplication implements ApplicationRunner {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
         try {
-            System.out.println("Deleting Restaurant with ID = " + 2);
+            System.out.println("Deleting offer with ID = " + offer.getId());
             transaction.begin();
             entityManager.remove(entityManager.contains(offer) ? offer : entityManager.merge(offer));
             transaction.commit();
