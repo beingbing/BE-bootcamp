@@ -6,6 +6,7 @@ import jakarta.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 public class HibernateService {
 
     @Autowired
+    @Qualifier("LocalSessionFactory")
     private SessionFactory sessionFactory;
 
     public void execute() {
@@ -26,8 +28,8 @@ public class HibernateService {
 
     private void persistWithHibernate() {
         LockdownOffer offer = new LockdownOffer();
-        offer.setAvgAmt(8L);
-        offer.setMerchantId(76L);
+        offer.setAvgAmt(100L);
+        offer.setMerchantId(8L);
         offer.setAvgCnt(3L);
         System.out.println("offer: " + offer);
         inTransaction(offer);
