@@ -6,11 +6,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling // will look for @scheduled and start it
@@ -26,7 +29,8 @@ public class BootcampApplication implements ApplicationRunner {
         System.out.println("run called");
         EntityManagerFactory entityManagerFactory = setUp();
 //        persistWithJPA(entityManagerFactory);
-        fetchWithJPA(entityManagerFactory);
+//        fetchWithJPA(entityManagerFactory);
+        fetchAllWithJPA(entityManagerFactory);
     }
 
     protected EntityManagerFactory setUp() {
@@ -96,5 +100,19 @@ public class BootcampApplication implements ApplicationRunner {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         LockdownOffer res = entityManager.find(LockdownOffer.class, 10);
         System.out.println("Got object " + res);
+    }
+
+    public void fetchAllWithJPA(EntityManagerFactory entityManagerFactory) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Query listResult = entityManager.createQuery("SELECT e FROM LockdownOffer e");
+        List<LockdownOffer> listRes = listResult.getResultList();
+
+        if (listRes == null) {
+            System.out.println("No Restaurant found . ");
+        } else {
+            for (LockdownOffer r : listRes) {
+                System.out.println("Got object : " + r);
+            }
+        }
     }
 }
