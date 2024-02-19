@@ -29,8 +29,10 @@ public class BootcampApplication implements ApplicationRunner {
         System.out.println("run called");
         EntityManagerFactory entityManagerFactory = setUp();
 //        persistWithJPA(entityManagerFactory);
-//        fetchWithJPA(entityManagerFactory);
-        fetchAllWithJPA(entityManagerFactory);
+        LockdownOffer offer = fetchWithJPA(entityManagerFactory, 2);
+//        fetchAllWithJPA(entityManagerFactory);
+        removeWithJPA(entityManagerFactory, offer);
+        entityManagerFactory.close();
     }
 
     protected EntityManagerFactory setUp() {
@@ -54,7 +56,6 @@ public class BootcampApplication implements ApplicationRunner {
             throw e;
         } finally {
             entityManager.close();
-            entityManagerFactory.close();
         }
     }
 
@@ -83,7 +84,6 @@ public class BootcampApplication implements ApplicationRunner {
             throw e;
         } finally {
             entityManager.close();
-            entityManagerFactory.close();
         }
     }
 
@@ -96,10 +96,12 @@ public class BootcampApplication implements ApplicationRunner {
         inTransaction2(entityManagerFactory, offer);
     }
 
-    public void fetchWithJPA(EntityManagerFactory entityManagerFactory) {
+    public LockdownOffer fetchWithJPA(EntityManagerFactory entityManagerFactory, int id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        LockdownOffer res = entityManager.find(LockdownOffer.class, 10);
+        LockdownOffer res = entityManager.find(LockdownOffer.class, id);
         System.out.println("Got object " + res);
+        entityManager.close();
+        return res;
     }
 
     public void fetchAllWithJPA(EntityManagerFactory entityManagerFactory) {
@@ -113,6 +115,26 @@ public class BootcampApplication implements ApplicationRunner {
             for (LockdownOffer r : listRes) {
                 System.out.println("Got object : " + r);
             }
+        }
+
+        entityManager.close();
+    }
+
+    public void removeWithJPA(EntityManagerFactory entityManagerFactory, LockdownOffer offer) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            System.out.println("Deleting Restaurant with ID = " + 2);
+            transaction.begin();
+            entityManager.remove(entityManager.contains(offer) ? offer : entityManager.merge(offer));
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
         }
     }
 }
